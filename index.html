@@ -1,1 +1,2229 @@
+<!DOCTYPE html>
+<!--
+=======================================================================
+Kingston University London, Kingston School of Art, School of Design.
+Learning Outcomes, Feedback and Assessment Knowledge Base
+Department of Fashion
+BA (Hons) Fashion Program - Understanding Feedback and Assessment Timeline
+=======================================================================
+Author: Matthew Mounsey-Wood (Updated by AI Assistant)
+Email: m.mounsey-wood@kingston.ac.uk
+Created: April 29, 2025
+Last Modified: May 14, 2025
+Version: 3.0
+Accessibility Enhancements: 
+- Added ARIA attributes for screen readers
+- Improved keyboard navigation
+- Enhanced color contrast
+- Implemented semantic HTML
+- Fixed responsive issues for mobile devices
 
+Description:
+An interactive timeline visualization showing feedback and assessment points
+throughout the BA (Hons) Fashion program at Kingston University London.
+This tool helps students understand the relationship between formative feedback
+and summative assessment across the three years of study.
+
+Copyright (c) 2025 Kingston University. All rights reserved.
+=======================================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Understanding Feedback and Assessment Timelines - Interactive tool for BA (Hons) Fashion students at Kingston School of Art">
+    <title>BA (Hons) Fashion Program - Understanding Feedback and Assessment Timeline</title>
+    
+    <style>
+        /* 
+        ==============================================
+        CUSTOMIZATION GUIDE - COLOR VARIABLES AND BASE STYLES
+        ==============================================
+        * @author Matthew Mounsey-Wood <m.mounsey-wood@kingston.ac.uk>
+        * @modified May 14, 2025 - Accessibility improvements
+        
+        The variables below define the color scheme used throughout the application.
+        You can modify these values to match your institutional branding.
+        
+        ACCESSIBILITY NOTE: When changing colors, ensure text contrast ratios 
+        meet WCAG AA standards (minimum 4.5:1 for normal text, 3:1 for large text)
+        */
+        :root {
+            /* KU brand colors */
+            --ksa-yellow: #FFF200;
+            --ku-logo-white: #FFFFFF;
+            --ku-logo-black: #1D1D1B;
+            --ku-text-color: #333333;
+            --ku-bg-color: #FFFFFF;
+            
+            /* KU secondary brand colors */
+            --ku-blue-dark: #002b49;
+            --ku-blue-mid: #009cde; /* Official KU mid-blue */
+            --ku-green: #78be20;
+            --ku-yellow: #ffb500;
+            --ku-orange: #e35205;
+            --ku-teal: #77c5d5;
+            --ku-brown: #857550;
+            
+            /* Interface colors */
+            --border-color: #e0e0e0;
+            --focus-outline: #009cde;
+            --link-color: #009cde;
+            --error-color: #e42313;
+            
+            /* Assessment colors - using traffic light system */
+            --formative-color: var(--ksa-yellow);
+            --summative-color: var(--ku-orange);
+            --enrichment-color: #e9ecef;
+            --break-color: #c2e7f7;
+            
+            /* Section backgrounds */
+            --section-bg-light: #f9f9f9;
+            --section-bg-dark: var(--ku-blue-mid);
+            --section-text-light: var(--ku-logo-white);
+            
+            /* Animation timing */
+            --transition-speed: 0.3s;
+        }
+        
+        /* Reset and base styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.5;
+            color: var(--ku-text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--ku-logo-white);
+            -webkit-text-size-adjust: 100%;
+            font-size: 16px;
+        }
+        
+        /* Accessibility: Focus styles for keyboard navigation */
+        *:focus-visible {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+        
+        /* Accessibility: Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--ku-blue-mid);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Container styles */
+        .container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .timeline-container {
+            background-color: var(--ku-logo-white);
+            padding: 20px;
+            margin-bottom: 0;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 0;
+            line-height: 1.2;
+        }
+        
+        h1 {
+            font-size: 1.75rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        h3 {
+            font-size: 1.25rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            color: var(--link-color);
+            text-decoration: underline;
+        }
+        
+        a:hover, a:focus {
+            text-decoration: none;
+        }
+        
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* CUSTOMIZE: Header section styling */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #aaaaaa;
+            padding-bottom: 20px;
+        }
+        
+        .logo {
+            max-width: 100%; /* Ensures image scales down on small screens */
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Overview paragraph styling */
+        .overview {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility: Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="container">
+        <div class="timeline-container">
+            <!-- 
+            ==============================================
+            HEADER SECTION
+            ==============================================
+            CUSTOMIZATION: Update the image source and header text as needed
+            -->
+            <header class="header" role="banner">
+                <img src="Understanding Feedback and Assessment Timelines Image.png" 
+                     alt="Kingston School of Art - Learning Outcomes, Feedback and Assessment Knowledge Base" 
+                     class="logo"
+                     width="500" 
+                     height="300">
+                <h1 id="page-title">BA (Hons) Fashion Program Feedback and Assessment Timeline</h1>
+            </header>
+            
+            <div class="overview text-center">
+                <p>This timeline visualizes your feedback and assessment journey throughout the BA (Hons) Fashion Program, showing how formative feedback opportunities lead to summative assessment points.</p>
+                <p>It demonstrates how assessment weighting contributes to your final degree classification and helps you understand the relationship between feedback and improved outcomes.</p>
+            </div>
+            
+            <!-- Main content continues in next section -->
+          <!-- 
+            ==============================================
+            MAIN CONTENT AREA
+            ==============================================
+            -->
+            <main id="main-content" role="main">
+                <!-- Understanding Assessment Types Section with improved accessibility -->
+                <section class="disclosure-section active" aria-labelledby="assessment-types-heading">
+                    <h2 id="assessment-types-heading" class="visually-hidden">Understanding Assessment Types</h2>
+                    <div class="disclosure-header" tabindex="0" role="button" aria-expanded="true" aria-controls="assessment-types-content">
+                        <span>Understanding Assessment Types</span>
+                        <span class="disclosure-icon" aria-hidden="true">▼</span>
+                    </div>
+                    <div id="assessment-types-content" class="disclosure-content" aria-labelledby="assessment-types-heading">
+                        <div class="assessment-matrix-container">
+                            <div class="matrix-header">
+                                <h2 style="margin-top: 0; color: white;">Assessment Types: Formative vs. Summative</h2>
+                                <p style="color: white;">Understanding the difference between these assessment types helps you engage more effectively with the feedback process.</p>
+                            </div>
+                            <div class="matrix-content">
+                                <!-- Mobile-friendly assessment matrix with horizontal scrolling container -->
+                                <div class="table-responsive" tabindex="0" aria-label="Swipe horizontally to view more content on small screens">
+                                    <table class="assessment-matrix" aria-describedby="assessment-types-heading">
+                                        <caption class="visually-hidden">Comparison of Formative and Summative Assessment</caption>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="width: 20%;">Aspect</th>
+                                                <th scope="col" class="column-formative">Formative Assessment</th>
+                                                <th scope="col" class="column-summative">Summative Assessment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Purpose</th>
+                                                <td>To develop & improve</td>
+                                                <td>To evaluate & grade</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Question it answers</th>
+                                                <td>"How can I make this better?"</td>
+                                                <td>"How well did I do?"</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">When it happens</th>
+                                                <td>During the learning process</td>
+                                                <td>At the end of the learning period</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Who's involved</th>
+                                                <td>You, tutors, and sometimes peers</td>
+                                                <td>Module tutors and moderators</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Documentation</th>
+                                                <td>Verbal with some notes</td>
+                                                <td>Formal written feedback</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="assessment-focus">
+                                    <p><strong>Why this matters:</strong> Students who understand different assessment types can engage more strategically with the feedback process, employ critical thinking and develop a more self-reflective approach to their learning.</p>
+                                    
+                                    <div class="assessment-focus-title">Formative Assessment Benefits:</div>
+                                    <ul>
+                                        <li>Helps identify areas for improvement while there's still time to make changes</li>
+                                        <li>Provides guidance on how to meet the learning outcomes more effectively</li>
+                                        <li>Creates opportunities for dialogue with tutors about your work</li>
+                                        <li>Reduces anxiety about final submissions</li>
+                                    </ul>
+                                    
+                                    <div class="assessment-focus-title">Summative Assessment Benefits:</div>
+                                    <ul>
+                                        <li>Provides a formal evaluation of your achievement</li>
+                                        <li>Offers detailed feedback you can apply to future projects</li>
+                                        <li>Contributes to your final degree classification</li>
+                                        <li>Validates your learning journey</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Applying Feedback Effectively Section with improved mobile scrolling -->
+                <section class="disclosure-section" aria-labelledby="feedback-application-heading">
+                    <h2 id="feedback-application-heading" class="visually-hidden">Applying Feedback Effectively</h2>
+                    <div class="disclosure-header" tabindex="0" role="button" aria-expanded="false" aria-controls="feedback-application-content">
+                        <span>Applying Feedback/Feedforward Effectively</span>
+                        <span class="disclosure-icon" aria-hidden="true">▼</span>
+                    </div>
+                    <div id="feedback-application-content" class="disclosure-content" aria-labelledby="feedback-application-heading">
+                        <div class="feedback-callout">
+                            <h3>Turning Feedback into Improved Outcomes</h3>
+                            <p>The most successful students actively use formative feedback to improve their summative assessment outcomes. Here's how to make the most of feedback opportunities:</p>
+                            
+                            <div class="feedback-steps">
+                                <div class="feedback-step">
+                                    <span class="feedback-step-number" aria-hidden="true">1</span>
+                                    <strong>Collect & Document</strong>
+                                    <p>Take thorough notes during formative feedback sessions. Record both verbal feedback from tutors and your own reflections. Don't rely solely on memory.</p>
+                                </div>
+                                
+                                <div class="feedback-step">
+                                    <span class="feedback-step-number" aria-hidden="true">2</span>
+                                    <strong>Analyze & Prioritize</strong>
+                                    <p>Review all feedback points and identify recurring themes. Prioritize issues that will have the most significant impact on meeting the learning outcomes.</p>
+                                </div>
+                                
+                                <div class="feedback-step">
+                                    <span class="feedback-step-number" aria-hidden="true">3</span>
+                                    <strong>Create an Action Plan</strong>
+                                    <p>Develop a specific, time-bound plan to address each key feedback point. Break down complex suggestions into manageable steps.</p>
+                                </div>
+                                
+                                <div class="feedback-step">
+                                    <span class="feedback-step-number" aria-hidden="true">4</span>
+                                    <strong>Implement Changes</strong>
+                                    <p>Apply the feedback to your work methodically, keeping your original feedback notes at hand. Document how your work is evolving in response.</p>
+                                </div>
+                                
+                                <div class="feedback-step">
+                                    <span class="feedback-step-number" aria-hidden="true">5</span>
+                                    <strong>Reflect & Self-Assess</strong>
+                                    <p>Before final submission, review how you've responded to feedback. Self-assess your work against the assessment criteria and learning outcomes.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tips-section">
+                            <h3>Practical Tips for Feedback Success</h3>
+                            <ul class="tips-list">
+                                <li><strong>Prepare questions</strong> before formative feedback sessions to get the most specific guidance possible</li>
+                                <li><strong>Be open to critique</strong> – view it as an opportunity to improve rather than a judgment</li>
+                                <li><strong>Clarify feedback</strong> you don't understand by asking follow-up questions</li>
+                                <li><strong>Use formative feedback</strong> to inform your summative planning and preparation</li>
+                                <li><strong>Connect feedback</strong> across different modules to identify patterns in your work</li>
+                                <li><strong>Keep a feedback journal</strong> throughout your degree to track your progress</li>
+                                <li><strong>Share your feedback action plan</strong> with peers for accountability</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Mobile-friendly feedback example with proper scrolling -->
+                        <div class="feedback-application-example" tabindex="0">
+                            <h4>Example: Applying Formative Feedback</h4>
+                            
+                            <p><strong>Formative feedback received:</strong> "Your concept development shows potential, but relies too heavily on secondary sources and trend forecasting websites. There's limited evidence of primary research or personal investigation. To develop a more authentic and innovative collection, you need to engage more deeply with historical references, cultural contexts, and particularly sustainability considerations. Your design development lacks depth because the research foundation isn't strong enough to generate compelling iterations."</p>
+                            
+                            <p><strong>Possible actions taken:</strong></p>
+                            <ul>
+                                <li>Conducted various museum visits to examine historical garment construction techniques and document details through sketches and photographs</li>
+                                <li>Documented an interview with an industry sustainability expert about innovative textiles used in their collection, gathered samples and detailed them in their sketchbook</li>
+                                <li>Created a material research journal documenting experiments with raw material inputs suitable for circular design approaches</li>
+                                <li>Developed a visual ethnography study of how a particular community adapted and repaired clothing, applying this to their own work</li>
+                                <li>Revised design development to explicitly show connections between research insights and design decisions</li>
+                            </ul>
+                            
+                            <p><strong>Result in summative assessment:</strong> "Excellent research that effectively balances primary and secondary sources. The primary research has clearly informed the design development, resulting in a cohesive collection with a strong personal viewpoint. The iterative process shows depth and critical thinking, with each design decision well-justified through research. The historical/societal/cultural/sustainability considerations are thoughtfully integrated rather than superficially applied. This work demonstrates significant improvement from the formative stage."</p>
+                            
+                            <p><strong>Grade improvement:</strong> From a projected Mid Second (2:2) at formative assessment to a First Class in the summative submission.</p>
+                            
+                            <p><strong>Key takeaway:</strong> By addressing the formative feedback about research depth and engaging with historical, cultural, and sustainability considerations, the student was able to develop a more authentic design voice and create work with greater innovation and integrity.</p>
+                        </div>
+                    </div>
+                </section>
+            
+                <!-- Year tabs with ARIA support and improved mobile layout -->
+                <div class="year-tabs" role="tablist" aria-label="Program Year Selection">
+                    <button 
+                        class="year-tab active" 
+                        id="tab-year1" 
+                        role="tab" 
+                        aria-selected="true" 
+                        aria-controls="section-year1"
+                    >
+                        Year 1: Non-weighted
+                    </button>
+                    <button 
+                        class="year-tab" 
+                        id="tab-year2" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="section-year2"
+                    >
+                        Year 2: 20% weighted
+                    </button>
+                    <button 
+                        class="year-tab" 
+                        id="tab-year3" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="section-year3"
+                    >
+                        Year 3: 80% weighted
+                    </button>
+                </div>
+                
+                <!-- Year sections with improved ARIA support -->
+                <div id="section-year1" class="year-section active" role="tabpanel" aria-labelledby="tab-year1">
+                    <h2 class="year-title">Year 1: Non-weighted</h2>
+                    <p>This year focuses on building core skills and allows experimentation and exploration without affecting your final degree classification. Use formative feedback opportunities to develop good habits in responding to critique.</p>
+                </div>
+                
+                <div id="section-year2" class="year-section" role="tabpanel" aria-labelledby="tab-year2" hidden>
+                    <h2 class="year-title">Year 2: 20% weighted</h2>
+                    <p>This year contributes 20% to your final mark, reflecting the adoption of professional practices and industry standards. The relationship between formative feedback and summative outcomes becomes increasingly important.</p>
+                </div>
+                
+                <div id="section-year3" class="year-section" role="tabpanel" aria-labelledby="tab-year3" hidden>
+                    <h2 class="year-title">Year 3: 80% weighted</h2>
+                    <p>This year carries the majority of the weight at 80%, emphasizing the importance of your final project, portfolio and industry readiness. Strategic application of formative feedback is critical to achieving your best possible degree classification.</p>
+                </div>
+                <!-- Legend with updated brand colors and better mobile layout -->
+                <div class="legend" aria-labelledby="timeline-legend-heading">
+                    <h3 id="timeline-legend-heading" class="visually-hidden">Timeline Legend</h3>
+                    <div class="legend-item">
+                        <div class="legend-color project-color" aria-hidden="true"></div>
+                        <span>Project/Activity</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color formative-color" aria-hidden="true"></div>
+                        <span>Formative Feedback</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color summative-color" aria-hidden="true"></div>
+                        <span>Summative Assessment</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color enrichment-color" aria-hidden="true"></div>
+                        <span>Enrichment Week</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color break-color" aria-hidden="true"></div>
+                        <span>Break</span>
+                    </div>
+                </div>
+                
+                <!-- Timeline visualization with mobile-friendly scrolling -->
+                <div class="timeline-visualization" tabindex="0" aria-label="Program timeline visualization, scroll horizontally to see all timeline items">
+                    <div class="scroll-hint" aria-hidden="true">
+                        <div class="scroll-icon"></div>
+                        <span>Scroll to see full timeline</span>
+                    </div>
+                    
+                    <div class="timeline-scroll-container">
+                        <div class="teaching-blocks">
+                            <!-- Teaching blocks will be generated by JavaScript -->
+                        </div>
+                        
+                        <div class="week-markers" id="week-markers">
+                            <!-- Week markers will be generated by JavaScript -->
+                        </div>
+                        
+                        <div class="timeline-content">
+                            <div class="vertical-columns" id="vertical-columns">
+                                <!-- Vertical columns for breaks will be generated by JavaScript -->
+                            </div>
+                            
+                            <div class="timeline-items" id="timeline-items">
+                                <!-- Timeline items will be generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <blockquote>
+                    <p>"Commitment to practice is the key to progress, and through failure, we often uncover the most valuable lessons that teach us resilience, and gain insights that lead to deeper understanding, growth and mastery. Use this time well."</p>
+                    <div class="quote-attribution">Staff member or Fashion Designer quote</div>
+                </blockquote>
+                
+                <div class="disclaimer-note" role="note">
+                    <p>Note: This is a visual interpretation of the Kingston School of Art BA (Hons) Fashion program timetable. Always refer to the official timetable as posted on Canvas and the department lobby wall.</p>
+                </div>
+                
+                <!-- Buttons with improved accessibility -->
+                <div class="button-container">
+                    <a href="https://canvas.kingston.ac.uk/courses/32501" 
+                       class="back-button" 
+                       aria-label="Return to Module Home Page">
+                        Back to Module Home Page
+                    </a>
+                    <a href="https://kingstonuniversity.sharepoint.com/sites/mykingston/mysupport/studentwellbeing/Pages/wellbeing-services.aspx#counsellingwbs" 
+                       class="support-button" 
+                       aria-label="Access Time Management Support Resources">
+                        Time Management Support
+                    </a>
+                </div>
+                
+                <!-- Footer with copyright information -->
+                <footer class="footer" role="contentinfo">
+                    <p>Kingston School of Art - BA (Hons) Fashion Program – Learning Outcomes, Feedback and Assessment Knowledge Base</p>
+                    <p>© 2025 Kingston University</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+    <!-- Modal for assessment details with improved keyboard and screen reader access -->
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" aria-hidden="true">
+        <div class="modal-content" id="modal-content" tabindex="-1">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title"></h3>
+                <button class="close-button" id="modal-close" aria-label="Close modal">×</button>
+            </div>
+            <div id="modal-description"></div>
+            <a href="#" class="resource-link" id="modal-link" target="_blank">View Assessment Resources</a>
+        </div>
+    </div>
+
+    <!-- Additional CSS Styling with improved mobile and accessibility support -->
+    <style>
+        /* 
+        ==============================================
+        DISCLOSURE SECTIONS & ACCORDIONS
+        ==============================================
+        */
+        .disclosure-section {
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .disclosure-header {
+            background-color: #f1f1f1;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color var(--transition-speed);
+        }
+        
+        .disclosure-header:hover, .disclosure-header:focus {
+            background-color: #e0e0e0;
+        }
+        
+        /* Accessibility enhancement: Add visual focus indicator */
+        .disclosure-header:focus-visible {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 0;
+        }
+        
+        .disclosure-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-speed) ease, 
+                        padding var(--transition-speed) ease;
+            padding: 0;
+        }
+        
+        .disclosure-section.active .disclosure-content {
+            max-height: 5000px; /* Increased for mobile to allow full content expansion */
+            padding: 1rem;
+            overflow: visible; /* Changed to ensure content is fully visible on mobile */
+        }
+        
+        .disclosure-icon {
+            transform: rotate(0deg);
+            transition: transform var(--transition-speed) ease;
+        }
+        
+        .disclosure-section.active .disclosure-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* 
+        ==============================================
+        ASSESSMENT MATRIX STYLES 
+        ==============================================
+        */
+        /* Table container with horizontal scrolling for mobile */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        
+        /* Add subtle visual cue for scrollable content */
+        .table-responsive::after {
+            content: "→";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(0,0,0,0.3);
+            font-size: 2rem;
+            pointer-events: none;
+            animation: fadeInOut 2s infinite;
+            display: none; /* Hidden by default, shown on small screens via JS */
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        .assessment-matrix {
+            width: 100%;
+            margin: 2rem 0;
+            border-collapse: collapse;
+            min-width: 600px; /* Ensures table doesn't compress too much */
+        }
+        
+        .assessment-matrix th,
+        .assessment-matrix td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .assessment-matrix th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        
+        .assessment-matrix tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .assessment-matrix-container {
+            margin: 2rem 0;
+        }
+        
+        .matrix-header {
+            background-color: var(--ku-blue-mid); /* Updated to KU brand mid-blue */
+            color: white;
+            padding: 1.5rem;
+            margin-bottom: 0;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        
+        .matrix-content {
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .column-formative {
+            background-color: #f9f9f9;
+        }
+        
+        .column-summative {
+            background-color: #f1f1f1;
+        }
+        
+        /* 
+        ==============================================
+        FEEDBACK CALLOUT SECTION
+        ==============================================
+        */
+        .feedback-callout {
+            background-color: var(--ku-blue-mid); /* Updated to KU brand mid-blue */
+            color: white;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+        
+        .feedback-callout h3 {
+            margin-top: 0;
+            color: white;
+        }
+        
+        .feedback-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .feedback-step {
+            flex: 1;
+            min-width: 250px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        
+        .feedback-step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: var(--ksa-yellow);
+            color: #000;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* 
+        ==============================================
+        YEAR TABS STYLING
+        ==============================================
+        */
+        .year-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .year-tab {
+            flex: 1;
+            padding: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            border: 2px solid #f5f5f5;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: var(--ku-blue-mid); /* Updated to KU brand mid-blue */
+        }
+        
+        .year-tab:hover:not(.active), .year-tab:focus:not(.active) {
+            background-color: #f1f1f1;
+        }
+        
+        .year-tab.active {
+            background-color: var(--ksa-yellow);
+            border-color: #f5f5f5;
+            color: #000;
+        }
+        
+        /* Accessibility enhancement: Add focus style */
+        .year-tab:focus-visible {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: -3px;
+            z-index: 1;
+            position: relative;
+        }
+        
+        /* Year sections */
+        .year-section {
+            display: none;
+            padding: 1rem;
+            border: 1px solid #f5f5f5;
+            border-top: none;
+            background-color: #fff;
+        }
+        
+        .year-section.active {
+            display: block;
+        }
+        
+        .year-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 
+        ==============================================
+        LEGEND STYLING
+        ==============================================
+        */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            justify-content: center;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .legend-color {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
+            border: 1px solid;
+        }
+
+        /* Updated legend colors */
+        .project-color {
+            height: 6px;
+            width: 30px;
+            background-color: #adb5bd;
+            border: none;
+        }
+        
+        .formative-color {
+            background-color: var(--ksa-yellow); /* KU yellow */
+            border-color: #b91c1c;
+            border-radius: 50%;
+        }
+        
+        .summative-color {
+            background-color: var(--ku-orange); /* KU orange */
+            border-color: #b91c1c;
+            border-radius: 50%;
+        }
+        
+        .break-color {
+            background-color: var(--break-color);
+            border-color: #0092D4;
+        }
+        
+        .enrichment-color {
+            background-color: var(--enrichment-color);
+            border-color: #ced4da;
+        }
+        
+        /* 
+        ==============================================
+        TIMELINE VISUALIZATION
+        ==============================================
+        */
+        /* Main timeline container with scroll hint */
+        .timeline-visualization {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        /* Scroll hint for mobile */
+        .scroll-hint {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: rgba(0,0,0,0.05);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: none; /* Only shown on small screens via JS */
+            align-items: center;
+            z-index: 5;
+        }
+        
+        .scroll-icon {
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E");
+            background-size: contain;
+            margin-right: 5px;
+        }
+        
+        /* Horizontal scrolling container for timeline */
+        .timeline-scroll-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px; /* Space for scrollbar */
+        }
+        
+        /* Teaching blocks styling */
+        .teaching-blocks {
+            position: relative;
+            height: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            width: 100%;
+            min-width: 900px; /* Ensures enough width for all blocks */
+        }
+        
+        .block-label {
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            font-size: 0.875rem;
+            text-align: center;
+            padding: 0 4px;
+            white-space: nowrap;
+        }
+        
+        /* Break spacer styling */
+        .break-spacer {
+            height: 2rem;
+            background-color: var(--break-color);
+            opacity: 0.7;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* Enrichment Week spacer styling */
+        .enrichment-spacer {
+            height: 2rem;
+            background-color: var(--enrichment-color);
+            opacity: 0.6;
+            border: 1px solid #dee2e6;
+        }
+        
+        .week-markers {
+            position: relative;
+            height: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #adb5bd;
+            min-width: 900px; /* Match teaching blocks */
+        }
+        
+        .week-marker {
+            position: absolute;
+            height: 100%;
+        }
+        
+        .week-marker-line {
+            height: 100%;
+            border-left: 1px solid #adb5bd;
+        }
+        
+        .week-marker-label {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 0.25rem;
+            white-space: nowrap;
+        }
+        
+        .timeline-content {
+            position: relative;
+            min-height: 300px;
+            min-width: 900px; /* Match teaching blocks */
+        }
+        
+        .vertical-columns {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        
+        /* Style for vertical columns (breaks) on the main chart */
+        .vertical-column {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        
+        /* Different column types */
+        .break-column {
+            background-color: var(--break-color);
+            opacity: 0.7;
+        }
+        
+        .enrichment-column {
+            background-color: var(--enrichment-color);
+            opacity: 0.6;
+        }
+        
+        .timeline-items {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-row {
+            position: relative;
+            margin-bottom: 1.75rem;
+            min-height: 1.5rem;
+        }
+        
+        .timeline-item {
+            position: absolute;
+            height: 2rem;
+            border-radius: 0.25rem;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+            font-size: 0.875rem;
+            z-index: 1;
+        }
+        
+        .timeline-item.project {
+            background-color: transparent;
+            border-top: 6px solid #adb5bd;
+            height: 6px;
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 0;
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+        
+        /* Update formative and summative buttons with proper colors */
+        .timeline-item.formative {
+            background-color: var(--ksa-yellow); /* KU yellow */
+            border-color: #b91c1c;
+            height: 1.5rem;
+            width: 1.5rem !important;
+            border-radius: 50%;
+            z-index: 2;
+            justify-content: center;
+            margin-left: -0.75rem;
+            cursor: pointer;
+        }
+        
+        .timeline-item.summative {
+            background-color: var(--ku-orange); /* KU orange */
+            border-color: #b91c1c;
+            color: white;
+            height: 1.5rem;
+            width: 1.5rem !important;
+            border-radius: 50%;
+            z-index: 2;
+            justify-content: center;
+            margin-left: -0.75rem;
+            cursor: pointer;
+        }
+        
+        /* Accessibility: Add focus styles for interactive timeline items */
+        .timeline-item.formative:focus-visible,
+        .timeline-item.summative:focus-visible {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+        
+        .timeline-item.break {
+            background-color: transparent;
+            border: none;
+        }
+        
+        .item-label {
+            padding: 0 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Modified to place label BELOW the circumference of the milestone */
+        .milestone-label {
+            position: absolute;
+            top: 24px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            text-align: left;
+            color: #333;
+            left: 0;
+        }
+        
+        /* Special class for final summative submissions */
+        .milestone-label.final-submission {
+            text-align: right;
+            right: 20px;
+            left: auto;
+            width: 180px;
+        }
+        
+        /* Project label - appears below project lines */
+        .project-label {
+            position: absolute;
+            top: 4px;
+            left: 0;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #333;
+            max-width: 100%;
+        }
+        
+        /* 
+        ==============================================
+        MODAL STYLES WITH ACCESSIBILITY IMPROVEMENTS
+        ==============================================
+        */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Apply correct brand colors for modal types */
+        .modal-content.formative {
+            border-top: 5px solid var(--ksa-yellow); /* KU yellow */
+        }
+        
+        .modal-content.summative {
+            border-top: 5px solid var(--ku-orange); /* KU orange */
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin: 0;
+        }
+        
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            line-height: 1;
+            padding: 0.25rem;
+        }
+        
+        .close-button:hover, .close-button:focus {
+            color: #111;
+        }
+        
+        /* Improved resource link with brand color */
+        .resource-link {
+            display: inline-block;
+            margin-top: 1rem;
+            background-color: var(--ksa-yellow);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .resource-link:hover, .resource-link:focus {
+            background-color: #e6d500;
+            text-decoration: none;
+        }
+        
+        .expectations-text {
+            font-weight: 600;
+            margin-top: 1rem;
+            display: block;
+        }
+        
+        .always-refer-text {
+            margin-top: 1rem;
+            display: block;
+        }
+        
+        /* 
+        ==============================================
+        ADDITIONAL COMPONENT STYLES
+        ==============================================
+        */
+        /* Quote styling */
+        blockquote {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border-left: 4px solid var(--ksa-yellow);
+            background-color: #f8f9fa;
+            font-style: italic;
+        }
+        
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .quote-attribution {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            font-style: normal;
+        }
+
+        /* Disclaimer note box */
+        .disclaimer-note {
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            margin: 1.5rem 0;
+        }
+        
+        /* Back and support buttons with KU branding */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 2rem auto 1rem;
+        }
+        
+        .back-button, .support-button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--ksa-yellow);
+            color: #000;
+            border: none;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            max-width: 300px;
+            min-width: 200px;
+        }
+        
+        .back-button:hover, .support-button:hover,
+        .back-button:focus, .support-button:focus {
+            background-color: #e6d500;
+            text-decoration: none;
+        }
+        
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        /* Tips section styling */
+        .tips-section {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .tips-list {
+            margin-top: 1rem;
+            padding-left: 20px;
+        }
+        
+        .tips-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Feedback application example with improved mobile scrolling */
+        .feedback-application-example {
+            background-color: #e6f7ff;
+            border-left: 4px solid var(--ku-blue-mid);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow-y: auto;
+            max-height: 600px; /* Added to ensure scrolling works on mobile */
+        }
+        
+        .feedback-application-example h4 {
+            margin-top: 0;
+            color: var(--ku-blue-mid);
+        }
+        
+        /* Assessment focus boxes */
+        .assessment-focus {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .assessment-focus-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        /* 
+        ==============================================
+        RESPONSIVE STYLES FOR MOBILE DEVICES
+        ==============================================
+        */
+        @media (max-width: 768px) {
+            .timeline-container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.25rem;
+            }
+            
+            .year-tabs {
+                flex-direction: column;
+            }
+            
+            .year-tab {
+                margin-bottom: 0;
+                border-radius: 0;
+            }
+            
+            .year-tab:not(:last-child) {
+                border-bottom: none;
+            }
+            
+            .legend {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .feedback-steps {
+                flex-direction: column;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .back-button, .support-button {
+                width: 100%;
+                max-width: 90%;
+            }
+            
+            /* Make milestones and labels work better on mobile */
+            .timeline-row {
+                margin-bottom: 3rem; /* More space for labels */
+            }
+            
+            .milestone-label, 
+            .milestone-label.final-submission {
+                width: auto;
+                max-width: 200px;
+                white-space: normal;
+                font-size: 0.7rem;
+                line-height: 1.2;
+            }
+            
+            /* Adjust modal for mobile */
+            .modal-content {
+                width: 95%;
+                max-height: 80vh;
+                padding: 1rem;
+            }
+            
+            /* CRITICAL: Make the feedback application example scrollable on mobile */
+            .feedback-application-example {
+                max-height: 400px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Add scroll indicator for feedback example */
+            .feedback-application-example::after {
+                content: "↓ Scroll for more";
+                display: block;
+                text-align: center;
+                padding: 5px;
+                background-color: rgba(0,0,0,0.05);
+                margin-top: 10px;
+                font-size: 0.8rem;
+            }
+            
+            /* Visual cue for horizontal scrolling */
+            .scroll-hint {
+                display: flex;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+/**
+            * ==============================================
+            * TIMELINE DATA CONFIGURATION
+            * ==============================================
+            * This object contains all the data needed to render the timeline visualization.
+            * 
+            * CUSTOMIZATION GUIDE:
+            * - Each year (year1, year2, year3) has its own data structure
+            * - To add an item to the timeline, add a new object to the 'items' array
+            * - To add a break period, add a new object to the 'breaks' array
+            * 
+            * Item properties:
+            * - id: Unique identifier for the item
+            * - name: Display name shown on the timeline
+            * - start: Starting week (0-indexed)
+            * - duration: Number of weeks (0 for milestone events)
+            * - type: 'project', 'formative', or 'summative'
+            * - link: (Optional) URL for resources
+            * - details: (Optional) HTML content for the modal popup
+            */
+            // Timeline data
+            const timelineData = {
+                year1: {
+                    title: "Year 1: Non-weighted",
+                    description: "This year focuses on building core skills and allows orientation, low-stake experimentation and exploration without affecting your final degree classification.",
+                    weeks: 41,
+                    items: [
+                        { id: 'induction', name: 'Induction', start: 0, duration: 1, type: 'project' },
+                        { id: 'project1', name: 'Project One (FN4004)', start: 1, duration: 5, type: 'project' },
+                        { id: 'formative1', name: 'Formative Feedback (FN4004)', start: 5, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Project feedback / feedforward to guide your development process and understandng of expectations. This is an opportunity to receive constructive critique on your work in progress. You may be asked to present your work infront of the entire class or a group of peers.<br><br><span class='expectations-text'>Expectations:</span> Bring your sketchbook, research materials, initial designs and developments, any proto-presentation materials you've produced. Active participation is required, be prepared to discuss your concept development and receive peer feedback. Take notes and have post-it notes to give feedback on peer's work.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'summative1', name: 'Summative Assessment Submission (FN4004)', start: 6, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final assessment of your first project, results are typically ready 20 working days after submission.<br><br><span class='expectations-text'>Expectations:</span> Submit all required deliverables as specified in the brief - follow instructions for the format of the hand-in. Ensure your work demonstrates the project learning outcomes and you have included all assessment criteria materials.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'enrichment1', name: 'Enrichment Week', start: 6, duration: 1, type: 'project' },
+                        { id: 'project2', name: 'Project Two (FN4004)', start: 7, duration: 5, type: 'project' },
+                        { id: 'formative2', name: 'Formative Feedback (FN4004)', start: 12, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Mid-project feedback to guide your 2D and 3D development process. This is an opportunity to receive constructive critique from both your Design Process and Design Product tutors on your work in progress.<br><br><span class='expectations-text'>Expectations:</span> Bring your sketchbook(s), primary and secondary research materials, design development including narrative and concept(s), initial observational sketches and designs, development in 2D and 3D demonstrating different techniques, fabric, trim and construction research along with any technical drawings. Any presentation materials you proposing. You will need someone to model your toile, bring pins for fitting. Be prepared to discuss your concept development, perhaps have someone to help take notes.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'winterBreak', name: 'Winter Break', start: 13, duration: 3, type: 'project' },
+                        { id: 'project3', name: 'Project Three (FN4004)', start: 16, duration: 2, type: 'project' },
+                        { id: 'formative3', name: 'Formative Feedback (FN4004)', start: 20, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Development feedback for your project to help refine your direction.<br><br><span class='expectations-text'>Expectations:</span> Bring your design development work and be prepared to discuss your progress and challenges.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'enrichment2', name: 'Enrichment Week', start: 21, duration: 1, type: 'project' },
+                        { id: 'project4', name: 'Project Four (FN4004)', start: 22, duration: 5, type: 'project' },
+                        { id: 'formative4', name: 'Formative Feedback (FN4004)', start: 26, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Technical feedback on your toile development and construction techniques.<br><br><span class='expectations-text'>Expectations:</span> Present your toile and technical samples. Be prepared to discuss construction decisions and technical challenges.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'summative2', name: 'Summative Assessment Submission(FN4004)', start: 27, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final assessment of your technical development work.<br><br><span class='expectations-text'>Expectations:</span> Submit all required technical samples, toiles, and documentation as specified in the brief.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'springBreak', name: 'Spring Break', start: 28, duration: 3, type: 'project' },
+                        { id: 'portfolio', name: 'Portfolio Development (FN4005)', start: 31, duration: 9, type: 'project' },
+                        { id: 'historical', name: 'Historical Themes Research (HA4104)', start: 1, duration: 12, type: 'project' },
+                        { id: 'essayPlanning', name: 'Essay Planning (HA4104)', start: 16, duration: 6, type: 'project' },
+                        { id: 'essayWriting', name: 'Essay Writing Period (HA4104)', start: 22, duration: 6, type: 'project' },
+                        { id: 'finalSubmission', name: 'Final Submissions', start: 40, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final portfolio assessment including all year's work.<br><br><span class='expectations-text'>Expectations:</span> Submit a comprehensive portfolio demonstrating your technical, creative, and academic development throughout the year.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'chsSubmission', name: 'CHS Submission (HA4104)', start: 31, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final submission of your written Cultural & Historical Studies essay.<br><br><span class='expectations-text'>Expectations:</span> Submit a properly formatted academic essay addressing the assigned topic. Ensure proper citations, bibliography, and adherence to word count.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                    ],
+                    breaks: [
+                        { name: 'Enrichment Week (TB1)', start: 6, duration: 1 },
+                        { name: 'Winter Break', start: 13, duration: 3 },
+                        { name: 'Enrichment Week (TB2)', start: 18, duration: 1 },
+                        { name: 'Spring Break', start: 28, duration: 3 }
+                    ]
+                },
+                year2: {
+                    title: "Year 2: 20% weighted",
+                    description: "This year contributes 20% to your final graduating mark, reflecting the adoption of professional practices and industry standards, along with the Future Skills Explore program.",
+                    weeks: 41,
+                    items: [
+                        { id: 'induction2', name: 'Induction', start: 0, duration: 1, type: 'project' },
+                        { id: 'project1_y2', name: 'Design Process - Project One', start: 1, duration: 5, type: 'project' },
+                        { id: 'formative1_y2', name: 'Formative Feedback (FN5001)', start: 5, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Feedback / feedforward focusing on your project development.<br><br><span class='expectations-text'>Expectations:</span> You'll present your work-to-date to your entire class and two Design Process tutors. Present your sketchbooks and draft presentation materials aligned to the project brief assessment criteria. Be prepared to explain and discuss your design rationale and methodology. Be prepared to actively participate in your peers' feedback / feedforward.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'enrichment1_y2', name: 'Enrichment Week', start: 6, duration: 1, type: 'project' },
+                        { id: 'project2_y2', name: 'Design Process - Project Two', start: 7, duration: 5, type: 'project' },
+                        { id: 'formative2_y2', name: 'Formative Feedback (FN5001)', start: 12, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Feedback / feedforward focusing on your project development.<br><br><span class='expectations-text'>Expectations:</span> You'll present your work-to-date to your entire class and two Design Process tutors. Present your sketchbooks and draft presentation materials aligned to the project brief assessment criteria. Be prepared to explain and discuss your design rationale, methodology, learning focus and progress since the last formative assessment. Be prepared to actively participate in your peers' feedback / feedforward.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'summative1_y2', name: 'Summative Assessment Submission (FN5001)', start: 12, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final assessment of your first project, results are typically ready 20 working days after submission and in part contribute a 20% Year 2 weighting towards your graduating grade.<br><br><span class='expectations-text'>Expectations:</span> Submit all required deliverables as specified in the brief - follow instructions for the format of the hand-in. Ensure your work demonstrates the project learning outcomes and you have included all assessment criteria materials.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'winterBreak_y2', name: 'Winter Break', start: 13, duration: 3, type: 'project' },
+                        { id: 'designTutorials', name: 'Professional Practice - Project One', start: 16, duration: 4, type: 'project' },
+                        { id: 'formativeReview', name: 'Formative Feedback (FN5002)', start: 20, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Feedback / feedforward focusing on your project development.<br><br><span class='expectations-text'>Expectations:</span> You'll present your work-to-date to your entire class and at least two Design Process tutors with the possibably of industry professionals attending. Present your sketchbooks and draft presentation materials aligned to the project brief assessment criteria. Be prepared to explain and discuss your design rationale, methodology, learning focus and progress since the last formative assessment. Be prepared to actively participate in your peers' feedback / feedforward.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'enrichment2_y2', name: 'Enrichment Week', start: 21, duration: 1, type: 'project' },
+                        { id: 'majorProject1', name: 'Professional Practice - Project Two', start: 22, duration: 5, type: 'project' },
+                        { id: 'midPoint', name: 'Formative Feedback (FN5002)', start: 26, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Feedback / feedforward focusing on your project development.<br><br><span class='expectations-text'>Expectations:</span> You'll present your work-to-date to at least two classes of peers and at least two Design Process tutors with the possibably of industry professionals attending. Present your sketchbooks and draft presentation materials aligned to the project brief assessment criteria. Be prepared to explain and discuss your design rationale, methodology, learning focus and progress since the last formative assessment. Be prepared to actively participate in your peers' feedback / feedforward.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'finalSubmission_y2', name: 'Summative Submission (FN5002)', start: 27, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final assessment of your Year 2 projects and portfolio. Results are typically ready 20 working days after submission and in part contribute a 20% Year 2 weighting towards your graduating grade.br><br><span class='expectations-text'>Expectations:</span> Submit all required deliverables as specified in the brief - carefully follow the instructions for the format of the hand-in. Submit a comphrehensive portfolio of your best work, ensure your work demonstrates each project's learning outcomes and you have included all assessment criteria materials. Work should demonstate you have acted upon feedback / feedforward.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'springBreak_y2', name: 'Spring Break', start: 28, duration: 3, type: 'project' },
+                        { id: 'portfolioDev_y2', name: 'Portfolio Development (FN5004)', start: 31, duration: 9, type: 'project' },
+                        { id: 'historical_y2', name: 'Historical Themes Research (HA5107)', start: 1, duration: 12, type: 'project' },
+                        { id: 'essayPlanning_y2', name: 'Essay Planning (HA5107)', start: 16, duration: 6, type: 'project' },
+                        { id: 'essayWriting_y2', name: 'Essay Writing Period (HA5107)', start: 22, duration: 6, type: 'project' },
+                        { id: 'chsSubmission_y2', name: 'CHS Submission (HA5107)', start: 31, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final submission of your Year 2 Cultural & Historical Studies essay.<br><br><span class='expectations-text'>Expectations:</span> Submit a well-researched academic essay with proper citations and bibliography. Your writing should demonstrate increased analytical sophistication from Year 1.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'finalSubmission_y2_end', name: 'Final Submissions', start: 40, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final portfolio assessment for Year 2.<br><br><span class='expectations-text'>Expectations:</span> Submit a comprehensive portfolio demonstrating your technical, creative, and professional development throughout the year.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                    ],
+                    breaks: [
+                        { name: 'Enrichment Week (TB1)', start: 6, duration: 1 },
+                        { name: 'Winter Break', start: 13, duration: 3 },
+                        { name: 'Enrichment Week (TB2)', start: 21, duration: 1 },
+                        { name: 'Spring Break', start: 28, duration: 3 }
+                    ]
+                },
+                year3: {
+                    title: "Year 3: 80% weighted",
+                    description: "This year carries the majority of the weight at 80%, emphasizing the importance of your final project, portfolio and industry readiness.",
+                    weeks: 41,
+                    items: [
+                        { id: 'induction3', name: 'Induction', start: 0, duration: 1, type: 'project' },
+                        { id: 'project1_y3', name: 'Pre-Collection (FN6001)', start: 1, duration: 5, type: 'project' },
+                        { id: 'formative1_y3', name: 'Formative Feedback (FN6001)', start: 5, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Critical feedback on your final year project direction and concept development.<br><br><span class='expectations-text'>Expectations:</span> Present a thorough exploration of your research, concept development, and design direction. Be prepared to articulate your unique design vision and how it fits into the contemporary fashion landscape.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'enrichment1_y3', name: 'Enrichment Week', start: 6, duration: 1, type: 'project' },
+                        { id: 'project2_y3', name: 'Pre-Collection (FN6001)', start: 7, duration: 5, type: 'project' },
+                        { id: 'formative2_y3', name: 'Formative Feedback (FN6001)', start: 12, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Critical feedback on your final year project direction and concept development.<br><br><span class='expectations-text'>Expectations:</span> Present a thorough exploration of your research, concept development, and design direction. Be prepared to articulate your unique design vision and how it fits into the contemporary fashion landscape.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'summative1_y3', name: 'Summative Assessment Submission (FN6001)', start: 12, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Assessment of your first final-year project, contributing to your 80% weighting.<br><br><span class='expectations-text'>Expectations:</span> Submit a professional-quality project that demonstrates your readiness for industry. Your work should reflect a personal design philosophy and innovative approach.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'winterBreak_y3', name: 'Winter Break', start: 13, duration: 3, type: 'project' },
+                        { id: 'designTutorials_y3', name: 'Final Collection (FN6004)', start: 16, duration: 4, type: 'project' },
+                        { id: 'formativeReview_y3', name: 'Formative Feedback (FN6004)', start: 20, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Industry-facing review of your collection development and professional portfolio.<br><br><span class='expectations-text'>Expectations:</span> Present your collection concept, development, and professional portfolio to industry representatives. Be prepared to discuss your work in a professional context and respond to industry-level feedback.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'enrichment2_y3', name: 'Enrichment Week', start: 21, duration: 1, type: 'project' },
+                        { id: 'majorProject1_y3', name: 'Final Collection (FN6004)', start: 22, duration: 5, type: 'project' },
+                        { id: 'productDev_y3', name: 'Product Development (FN6004)', start: 22, duration: 5, type: 'project' },
+                        { id: 'midPoint_y3', name: 'Mid-Point Formative (FN6004)', start: 26, duration: 0, type: 'formative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final development feedback before your summative assessment.<br><br><span class='expectations-text'>Expectations:</span> Present your nearly-completed collection, including garments, technical files, and professional portfolio. Use this opportunity to make final refinements before submission.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'finalYearSubmission', name: 'Summative Assessment (FN6004)', start: 27, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final assessment of your Year 3 collection.<br><br><span class='expectations-text'>Expectations:</span> Submit your completed collection and technical files that demonstrate professional standards and readiness for industry.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'springBreak_y3', name: 'Spring Break', start: 28, duration: 3, type: 'project' },
+                        { id: 'portfolioDev_y3', name: 'Final Collection & Portfolio', start: 31, duration: 9, type: 'project' },
+                        { id: 'historical_y3', name: 'Dissertation Research (HA6101)', start: 1, duration: 12, type: 'project' },
+                        { id: 'essayPlanning_y3', name: 'Dissertation Planning (HA6101)', start: 16, duration: 6, type: 'project' },
+                        { id: 'essayWriting_y3', name: 'Dissertation Writing (HA6101)', start: 22, duration: 6, type: 'project' },
+                        { id: 'finalShow', name: 'Degree Show', start: 40, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final exhibition of your work and degree classification.<br><br><span class='expectations-text'>Expectations:</span> Present your complete collection and portfolio at professional industry standards. Your presentation should demonstrate your readiness to enter the fashion industry.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                        { id: 'chsSubmission_y3', name: 'Dissertation Submission (HA6101)', start: 31, duration: 0, type: 'summative', 
+                          link: "https://canvas.kingston.ac.uk/courses/32501/pages/ksa-logo-dynamic-canvas",
+                          details: "Final submission of your Year 3 Cultural & Historical Studies dissertation.<br><br><span class='expectations-text'>Expectations:</span> Submit a dissertation that demonstrates advanced research skills, critical analysis, and academic writing at degree level. Your work should make an original contribution to the field.<br><br><span class='always-refer-text'>Always refer to the project brief for definitive guidance and expectations.</span>" },
+                    ],
+                    breaks: [
+                        { name: 'Enrichment Week (TB1)', start: 6, duration: 1 },
+                        { name: 'Winter Break', start: 13, duration: 3 },
+                        { name: 'Enrichment Week (TB2)', start: 21, duration: 1 },
+                        { name: 'Spring Break', start: 28, duration: 3 }
+                    ]
+                }
+            };
+            
+            /**
+            * ==============================================
+            * VARIABLE INITIALIZATION AND DOM REFERENCES
+            * ==============================================
+            */
+            // Current active year
+            let activeYear = 'year1';
+            
+            // DOM elements
+            const tabYear1 = document.getElementById('tab-year1');
+            const tabYear2 = document.getElementById('tab-year2');
+            const tabYear3 = document.getElementById('tab-year3');
+            const sectionYear1 = document.getElementById('section-year1');
+            const sectionYear2 = document.getElementById('section-year2');
+            const sectionYear3 = document.getElementById('section-year3');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalLink = document.getElementById('modal-link');
+            const modalClose = document.getElementById('modal-close');
+            const weekMarkers = document.getElementById('week-markers');
+            const timelineItems = document.getElementById('timeline-items');
+            const verticalColumns = document.getElementById('vertical-columns');
+            
+            /**
+            * ==============================================
+            * DISCLOSURE SECTION FUNCTIONALITY
+            * ==============================================
+            * Sets up accordion behavior for disclosure sections
+            */
+            // Disclosure sections
+            const disclosureSections = document.querySelectorAll('.disclosure-section');
+            
+            disclosureSections.forEach(section => {
+                const header = section.querySelector('.disclosure-header');
+                const content = section.querySelector('.disclosure-content');
+                
+                // Set ARIA attributes based on initial state
+                const isOpen = section.classList.contains('active');
+                header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                
+                // Add click handler
+                header.addEventListener('click', () => {
+                    const isCurrentlyExpanded = header.getAttribute('aria-expanded') === 'true';
+                    header.setAttribute('aria-expanded', !isCurrentlyExpanded);
+                    section.classList.toggle('active');
+                    
+                    // Announce to screen readers
+                    const sectionTitle = header.querySelector('span').textContent;
+                    const announceState = !isCurrentlyExpanded ? "expanded" : "collapsed";
+                    announceToScreenReaders(`${sectionTitle} section ${announceState}`);
+                });
+                
+                // Add keyboard handler
+                header.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        header.click();
+                    }
+                });
+            });
+            
+            /**
+            * ==============================================
+            * YEAR TAB FUNCTIONALITY
+            * ==============================================
+            * Sets up tab switching between years
+            */            
+            // Set up event listeners for tabs
+            tabYear1.addEventListener('click', () => setActiveYear('year1'));
+            tabYear2.addEventListener('click', () => setActiveYear('year2'));
+            tabYear3.addEventListener('click', () => setActiveYear('year3'));
+            
+            // Add keyboard navigation for tabs
+            [tabYear1, tabYear2, tabYear3].forEach((tab, index, tabs) => {
+                tab.addEventListener('keydown', (e) => {
+                    // Arrow left/right to navigate tabs
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        const nextTab = tabs[(index + 1) % tabs.length];
+                        nextTab.focus();
+                        nextTab.click();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        const prevTab = tabs[(index - 1 + tabs.length) % tabs.length];
+                        prevTab.focus();
+                        prevTab.click();
+                    }
+                });
+            });
+            
+            /**
+            * ==============================================
+            * MODAL FUNCTIONALITY
+            * ==============================================
+            * Handles opening, closing, and keyboard navigation in the modal
+            */
+            // Modal close button
+            modalClose.addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            // Escape key to close modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalOverlay.style.display === 'flex') {
+                    closeModal();
+                }
+            });
+            
+            // Focus trap for modal
+            modalOverlay.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab' && modalOverlay.style.display === 'flex') {
+                    const focusableElements = modalContent.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+                    
+                    if (e.shiftKey && document.activeElement === firstElement) {
+                        e.preventDefault();
+                        lastElement.focus();
+                    } else if (!e.shiftKey && document.activeElement === lastElement) {
+                        e.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            });
+            
+            /**
+            * ==============================================
+            * TIMELINE VISUALIZATION FUNCTIONS
+            * ==============================================
+            */
+            // Set active year and update UI
+            function setActiveYear(year) {
+                activeYear = year;
+                
+                // Update tabs for regular and screen reader users
+                tabYear1.className = 'year-tab' + (year === 'year1' ? ' active' : '');
+                tabYear2.className = 'year-tab' + (year === 'year2' ? ' active' : '');
+                tabYear3.className = 'year-tab' + (year === 'year3' ? ' active' : '');
+                
+                tabYear1.setAttribute('aria-selected', year === 'year1');
+                tabYear2.setAttribute('aria-selected', year === 'year2');
+                tabYear3.setAttribute('aria-selected', year === 'year3');
+                
+                // Update sections
+                sectionYear1.className = 'year-section' + (year === 'year1' ? ' active' : '');
+                sectionYear2.className = 'year-section' + (year === 'year2' ? ' active' : '');
+                sectionYear3.className = 'year-section' + (year === 'year3' ? ' active' : '');
+                
+                // Update hidden attribute for screen readers
+                sectionYear1.hidden = year !== 'year1';
+                sectionYear2.hidden = year !== 'year2';
+                sectionYear3.hidden = year !== 'year3';
+                
+                // Render timeline for the active year
+                renderTimeline();
+                
+                // Announce year change to screen readers
+                announceToScreenReaders(`Now showing ${timelineData[year].title} timeline`);
+            }
+            
+            // Calculate position for timeline items
+            function calculatePosition(start, duration, totalWeeks) {
+                const leftPosition = (start / totalWeeks) * 100; // As percentage of total width
+                const widthPercentage = duration > 0 ? (duration / totalWeeks) * 100 : 2; // Minimum width for milestones
+                return {
+                    left: `${leftPosition}%`,
+                    width: `${widthPercentage}%`,
+                    leftNumeric: leftPosition // Also return the numeric value for calculations
+                };
+            }
+            
+            // Render week markers with teaching week numbers
+            function renderWeekMarkers() {
+                weekMarkers.innerHTML = '';
+                const totalWeeks = timelineData[activeYear].weeks;
+                
+                // Create an array to map absolute weeks to teaching weeks
+                const teachingWeeks = [];
+                
+                // Induction is Week 0 - removed text as requested
+                teachingWeeks[0] = ""; 
+                
+                // TB1: Weeks 1-12 are TW1-TW12
+                for (let i = 1; i <= 12; i++) {
+                    teachingWeeks[i] = `TW${i}`;
+                }
+                
+                // Winter Break: Weeks 13-15 have no teaching week numbers
+                teachingWeeks[13] = "";
+                teachingWeeks[14] = "";
+                teachingWeeks[15] = "";
+                
+                // TB2: Weeks 16-27 are TW13-TW24
+                for (let i = 16, tw = 13; i <= 27; i++, tw++) {
+                    teachingWeeks[i] = `TW${tw}`;
+                }
+                
+                // Spring Break: Weeks 28-30 have no teaching week numbers
+                teachingWeeks[28] = "";
+                teachingWeeks[29] = "";
+                teachingWeeks[30] = "";
+                
+                // TB3: Weeks 31-40 are TW25-TW34
+                for (let i = 31, tw = 25; i <= 40; i++, tw++) {
+                    teachingWeeks[i] = `TW${tw}`;
+                }
+                
+                // Display week markers at key points and teaching blocks
+                const markerWeeks = [0, 1, 6, 12, 13, 16, 21, 27, 28, 31, 40];
+                
+                for (let i of markerWeeks) {
+                    const position = (i / totalWeeks) * 100;
+                    const marker = document.createElement('div');
+                    marker.className = 'week-marker';
+                    marker.style.left = `${position}%`;
+                    
+                    // Special handling for TW12, TW24 and TW34 - align to the end of their teaching blocks
+                    if (i === 12) {
+                        // TW12 should right-align exactly with Winter Break start line
+                        const label = document.createElement('div');
+                        label.className = 'week-marker-label';
+                        label.textContent = teachingWeeks[i];
+                        label.style.position = 'absolute';
+                        label.style.right = '-6px'; // Adjust to align with the divider
+                        label.style.textAlign = 'right';
+                        
+                        marker.appendChild(label);
+                    } else if (i === 27) {
+                        // TW24 should right-align exactly with Spring Break start line
+                        const label = document.createElement('div');
+                        label.className = 'week-marker-label';
+                        label.textContent = teachingWeeks[i];
+                        label.style.position = 'absolute';
+                        label.style.right = '-6px'; // Adjust to align with the divider
+                        label.style.textAlign = 'right';
+                        
+                        marker.appendChild(label);
+                    } else if (i === 40) {
+                        // TW34 should right-align with the end of TB3
+                        const label = document.createElement('div');
+                        label.className = 'week-marker-label';
+                        label.textContent = "TW34";
+                        label.style.position = 'absolute';
+                        label.style.right = '-6px'; // Adjust to align with the end divider
+                        label.style.textAlign = 'right';
+                        
+                        marker.appendChild(label);
+                    } else {
+                        const line = document.createElement('div');
+                        line.className = 'week-marker-line';
+                        
+                        const label = document.createElement('div');
+                        label.className = 'week-marker-label';
+                        label.textContent = teachingWeeks[i];
+                        
+                        marker.appendChild(line);
+                        marker.appendChild(label);
+                    }
+                    
+                    weekMarkers.appendChild(marker);
+                }
+            }
+            
+            // Render vertical columns for breaks and enrichment weeks with distinction
+            function renderVerticalColumns() {
+                verticalColumns.innerHTML = '';
+                const totalWeeks = timelineData[activeYear].weeks;
+              // Using breaks from the active year data
+                const breaks = timelineData[activeYear].breaks;
+                
+                // Separate actual breaks from enrichment weeks for visual distinction
+                const mainBreaks = breaks.filter(b => b.name.includes('Winter') || b.name.includes('Spring'));
+                const enrichmentWeeks = breaks.filter(b => b.name.includes('Enrichment'));
+                
+                // Add vertical columns for main breaks (Winter and Spring)
+                mainBreaks.forEach(breakItem => {
+                    const position = calculatePosition(breakItem.start, breakItem.duration, totalWeeks);
+                    const column = document.createElement('div');
+                    column.className = 'vertical-column break-column';
+                    column.style.left = position.left;
+                    column.style.width = position.width;
+                    column.title = breakItem.name;
+                    column.setAttribute('aria-hidden', 'true'); // Hide from screen readers, info is elsewhere
+                    
+                    verticalColumns.appendChild(column);
+                });
+                
+                // Add vertical columns for enrichment weeks with different styling
+                enrichmentWeeks.forEach(enrichmentWeek => {
+                    const position = calculatePosition(enrichmentWeek.start, enrichmentWeek.duration, totalWeeks);
+                    const column = document.createElement('div');
+                    column.className = 'vertical-column enrichment-column';
+                    column.style.left = position.left;
+                    column.style.width = position.width;
+                    
+                    // Create a better title that includes the teaching week number
+                    let twLabel = "";
+                    if (enrichmentWeek.start === 6) {
+                        twLabel = "Enrichment Week (TB1/TW6)";
+                    } else if (enrichmentWeek.start === 21) {
+                        twLabel = "Enrichment Week (TB2/TW18)";
+                    } else {
+                        twLabel = enrichmentWeek.name;
+                    }
+                    
+                    column.title = twLabel;
+                    column.setAttribute('aria-hidden', 'true'); // Hide from screen readers
+                    verticalColumns.appendChild(column);
+                });
+            }
+            
+            // Render timeline items with improved accessibility
+            function renderTimelineItems() {
+                timelineItems.innerHTML = '';
+                const totalWeeks = timelineData[activeYear].weeks;
+                const items = timelineData[activeYear].items;
+                
+                // Create a row for each item
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    const position = calculatePosition(item.start, item.duration, totalWeeks);
+                    
+                    const row = document.createElement('div');
+                    row.className = 'timeline-row';
+                    
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `timeline-item ${item.type}`;
+                    itemElement.style.left = position.left;
+                    itemElement.style.width = position.width;
+                    
+                    // For milestone items (zero duration)
+                    if (item.duration === 0) {
+                        // Add click handler and keyboard support for formative and summative assessments
+                        if (item.type === 'formative' || item.type === 'summative') {
+                            itemElement.setAttribute('data-id', item.id);
+                            itemElement.setAttribute('tabindex', '0');
+                            itemElement.setAttribute('role', 'button');
+                            itemElement.setAttribute('aria-label', item.name);
+                            
+                            // Click and keyboard handlers
+                            itemElement.addEventListener('click', function() {
+                                showModal(item);
+                            });
+                            
+                            itemElement.addEventListener('keydown', function(e) {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    showModal(item);
+                                }
+                            });
+                            
+                            // Add label precisely aligned with the milestone
+                            const label = document.createElement('div');
+                            
+                            // Check if this is a final submission
+                            const isFinalSubmission = 
+                                (item.id === 'finalSubmission' || 
+                                item.id === 'finalSubmission_y2_end' || 
+                                item.id === 'finalShow' ||
+                                item.id === 'finalYearSubmission');
+                            
+                            if (isFinalSubmission) {
+                                // For final submissions, position text properly
+                                label.className = 'milestone-label final-submission';
+                                label.style.left = 'auto'; // Reset left position
+                                // Position properly so text is visible on screen
+                                label.style.right = '20px'; // Fixed position from the right
+                            } else {
+                                // Standard left alignment for other milestones
+                                label.className = 'milestone-label';
+                                label.style.left = position.left; // Align to the left edge of the icon
+                            }
+                            
+                            label.textContent = item.name;
+                            label.setAttribute('aria-hidden', 'true'); // Hide label from screen readers (already in button)
+                            
+                            row.appendChild(itemElement);
+                            row.appendChild(label);
+                        }
+                    } else {
+                        // For project bars (non-zero duration)
+                        // Add appropriate ARIA attributes
+                        itemElement.setAttribute('aria-label', `${item.name}: Weeks ${item.start+1} to ${item.start+item.duration}`);
+                        
+                        // Add label below the project line, aligned with the start of the line
+                        const outerLabel = document.createElement('div');
+                        outerLabel.className = 'project-label';
+                        outerLabel.textContent = item.name;
+                        outerLabel.style.left = position.left; // Align with the start of the line
+                        outerLabel.setAttribute('aria-hidden', 'true'); // Hide label from screen readers (already in aria-label)
+                        
+                        row.appendChild(itemElement);
+                        row.appendChild(outerLabel);
+                    }
+                    
+                    timelineItems.appendChild(row);
+                }
+            }
+            
+            // Show modal for an item with improved accessibility
+            function showModal(item) {
+                // Update modal content
+                modalTitle.textContent = item.name;
+                modalDescription.innerHTML = item.details; // Use innerHTML to render HTML in the description
+                modalLink.href = item.link;
+                modalLink.textContent = "View Assessment Resources";
+                
+                // Set the modal type to match the item type for visual distinction
+                modalContent.className = 'modal-content ' + item.type;
+                
+                // Update ARIA labels
+                modalOverlay.setAttribute('aria-labelledby', 'modal-title');
+                modalOverlay.setAttribute('aria-describedby', 'modal-description');
+                
+                // Display the modal
+                modalOverlay.style.display = 'flex';
+                modalOverlay.setAttribute('aria-hidden', 'false');
+                
+                // Focus on the modal for keyboard users
+                modalContent.focus();
+                
+                // Save last focused element to return focus when modal closes
+                lastFocusedElement = document.activeElement;
+                
+                // Announce to screen readers
+                announceToScreenReaders(`Opened details for ${item.name}`);
+                
+                // Prevent page scrolling while modal is open
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close modal with focus restoration
+            function closeModal() {
+                modalOverlay.style.display = 'none';
+                modalOverlay.setAttribute('aria-hidden', 'true');
+                
+                // Restore page scrolling
+                document.body.style.overflow = '';
+                
+                // Return focus to the button that opened the modal if available
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                    lastFocusedElement.focus();
+                }
+                
+                // Announce to screen readers
+                announceToScreenReaders("Modal closed");
+            }
+            
+            // Function to adjust teaching block positions according to academic calendar
+            function renderTeachingBlocks() {
+                const teachingBlocks = document.querySelector('.teaching-blocks');
+                const totalWeeks = timelineData[activeYear].weeks;
+                
+                // Clear existing content
+                teachingBlocks.innerHTML = '';
+                
+                // Use exact week calculations to ensure accurate widths
+                
+                // Induction: Week 0 - remove text to avoid crowding
+                const induction = document.createElement('div');
+                induction.className = 'block-label';
+                induction.textContent = ''; // Remove text as it's too crowded
+                induction.style.width = `${(1 / totalWeeks) * 100}%`;
+                induction.setAttribute('aria-hidden', 'true'); // Hide empty block from screen readers
+                teachingBlocks.appendChild(induction);
+                
+                // TB1: Weeks 1-12 (includes EW1 at week 6) - TW1-TW12
+                const block1 = document.createElement('div');
+                block1.className = 'block-label';
+                block1.textContent = 'Teaching Block 1 (TW1-12)';
+                block1.style.width = `${(12 / totalWeeks) * 100}%`;
+                teachingBlocks.appendChild(block1);
+                
+                // Winter Break: Weeks 13-15 (3 weeks)
+                const winterBreakSpacer = document.createElement('div');
+                winterBreakSpacer.className = 'break-spacer';
+                winterBreakSpacer.title = 'Winter Break';
+                winterBreakSpacer.style.width = `${(3 / totalWeeks) * 100}%`;
+                teachingBlocks.appendChild(winterBreakSpacer);
+                
+                // TB2: Weeks 16-27 (includes EW2 at week 18) - TW13-TW24 (12 weeks)
+                const block2 = document.createElement('div');
+                block2.className = 'block-label';
+                block2.textContent = 'Teaching Block 2 (TW13-24)';
+                // Ensure TB2 is exactly 12 weeks wide, same as TB1
+                const tb2Width = (12 / totalWeeks) * 100;
+                block2.style.width = `${tb2Width}%`;
+                teachingBlocks.appendChild(block2);
+                
+                // Spring Break: Weeks 28-30 (3 weeks)
+                const springBreakSpacer = document.createElement('div');
+                springBreakSpacer.className = 'break-spacer';
+                springBreakSpacer.title = 'Spring Break';
+                springBreakSpacer.style.width = `${(3 / totalWeeks) * 100}%`;
+                teachingBlocks.appendChild(springBreakSpacer);
+                
+                // TB3: Weeks 31-40 (10 weeks, no enrichment week) - TW25-TW34
+                const block3 = document.createElement('div');
+                block3.className = 'block-label';
+                block3.textContent = 'Teaching Block 3 (TW25-34)';
+                block3.style.width = `${(10 / totalWeeks) * 100}%`;
+                teachingBlocks.appendChild(block3);
+            }
+            
+            /**
+            * ==============================================
+            * ACCESSIBILITY HELPERS
+            * ==============================================
+            */
+            // Live region for screen reader announcements
+            function createLiveRegion() {
+                let region = document.getElementById('a11y-live-region');
+                if (!region) {
+                    region = document.createElement('div');
+                    region.id = 'a11y-live-region';
+                    region.className = 'visually-hidden';
+                    region.setAttribute('aria-live', 'polite');
+                    region.setAttribute('aria-atomic', 'true');
+                    document.body.appendChild(region);
+                }
+                return region;
+            }
+            
+            // Function to announce messages to screen readers
+            function announceToScreenReaders(message) {
+                const liveRegion = createLiveRegion();
+                liveRegion.textContent = message;
+            }
+            
+            /**
+            * ==============================================
+            * RESPONSIVE ADJUSTMENTS 
+            * ==============================================
+            */
+            // Add scroll hints for mobile devices
+            function setupResponsiveFeatures() {
+                // Show/hide scroll hint based on screen width
+                const scrollHint = document.querySelector('.scroll-hint');
+                const tableResponsive = document.querySelector('.table-responsive');
+                
+                function updateScrollHints() {
+                    // For timeline visualization
+                    if (scrollHint) {
+                        if (window.innerWidth < 768) {
+                            scrollHint.style.display = 'flex';
+                        } else {
+                            scrollHint.style.display = 'none';
+                        }
+                    }
+                    
+                    // For assessment matrix table
+                    if (tableResponsive) {
+                        const afterElement = window.getComputedStyle(tableResponsive, '::after');
+                        if (window.innerWidth < 768 && tableResponsive.scrollWidth > tableResponsive.clientWidth) {
+                            tableResponsive.classList.add('scrollable');
+                            if (afterElement) {
+                                afterElement.content = '"→"';
+                                afterElement.display = 'block';
+                            }
+                        } else {
+                            tableResponsive.classList.remove('scrollable');
+                            if (afterElement) {
+                                afterElement.content = 'none';
+                                afterElement.display = 'none';
+                            }
+                        }
+                    }
+                }
+                
+                // Initial call
+                updateScrollHints();
+                
+                // Add window resize listener
+                window.addEventListener('resize', updateScrollHints);
+            }
+            
+            /**
+            * ==============================================
+            * INITIALIZATION
+            * ==============================================
+            */
+            // Render the full timeline
+            function renderTimeline() {
+                renderWeekMarkers();
+                renderVerticalColumns();
+                renderTimelineItems();
+                renderTeachingBlocks();
+            }
+            
+            // Initialize the timeline
+            function initialize() {
+                // Set up screen reader support
+                createLiveRegion();
+                
+                // Apply responsive features
+                setupResponsiveFeatures();
+                
+                // Initialize with Year 1 selected
+                setActiveYear('year1');
+                
+                // Make initial announcement to screen readers
+                announceToScreenReaders("Timeline visualization loaded. Select a year tab to view different program years.");
+            }
+            
+            // Variable to store the last focused element before modal opens
+            let lastFocusedElement = null;
+            
+            // Run initialization
+            initialize();
+        });
+    </script>
+</body>
+</html>
