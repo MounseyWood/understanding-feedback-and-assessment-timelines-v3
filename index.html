@@ -1768,7 +1768,8 @@ Copyright (c) 2025 Kingston University. All rights reserved.
 if (year === 'year1') {
     sectionYear1.hidden = false;
     sectionYear1.style.display = 'block';
-}                sectionYear2.hidden = year !== 'year2';
+}                
+                sectionYear2.hidden = year !== 'year2';
                 sectionYear3.hidden = year !== 'year3';
                 
                 // Render timeline for the active year
@@ -2217,6 +2218,8 @@ if (year === 'year1') {
                 
                 // Initialize with Year 1 selected
                 setActiveYear('year1');
+
+                renderTimeline();
                 
                 // Make initial announcement to screen readers
                 announceToScreenReaders("Timeline visualization loaded. Select a year tab to view different program years.");
