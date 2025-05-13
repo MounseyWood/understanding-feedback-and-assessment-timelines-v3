@@ -786,17 +786,18 @@ Copyright (c) 2025 Kingston University. All rights reserved.
         }
         
         /* Year sections */
-        .year-section {
-            display: none;
-            padding: 1rem;
-            border: 1px solid #f5f5f5;
-            border-top: none;
-            background-color: #fff;
-        }
-        
-        .year-section.active {
-            display: block;
-        }
+.year-section {
+    display: none;
+    padding: 1rem;
+    border: 1px solid #f5f5f5;
+    border-top: none;
+    background-color: #fff;
+}
+
+/* This ensures active sections display properly */
+.year-section.active {
+    display: block !important; /* Added !important to override any conflicts */
+}
         
         .year-title {
             font-size: 1.25rem;
