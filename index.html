@@ -1764,7 +1764,11 @@ Copyright (c) 2025 Kingston University. All rights reserved.
                 
                 // Update hidden attribute for screen readers
                 sectionYear1.hidden = year !== 'year1';
-                sectionYear2.hidden = year !== 'year2';
+                // Force Year 1 to be visible on first load if it's the active year
+if (year === 'year1') {
+    sectionYear1.hidden = false;
+    sectionYear1.style.display = 'block';
+}                sectionYear2.hidden = year !== 'year2';
                 sectionYear3.hidden = year !== 'year3';
                 
                 // Render timeline for the active year
