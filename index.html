@@ -1746,39 +1746,62 @@ Copyright (c) 2025 Kingston University. All rights reserved.
             * ==============================================
             */
             // Set active year and update UI
-            function setActiveYear(year) {
-                activeYear = year;
-                
-                // Update tabs for regular and screen reader users
-                tabYear1.className = 'year-tab' + (year === 'year1' ? ' active' : '');
-                tabYear2.className = 'year-tab' + (year === 'year2' ? ' active' : '');
-                tabYear3.className = 'year-tab' + (year === 'year3' ? ' active' : '');
-                
-                tabYear1.setAttribute('aria-selected', year === 'year1');
-                tabYear2.setAttribute('aria-selected', year === 'year2');
-                tabYear3.setAttribute('aria-selected', year === 'year3');
-                
-                // Update sections
-                sectionYear1.className = 'year-section' + (year === 'year1' ? ' active' : '');
-                sectionYear2.className = 'year-section' + (year === 'year2' ? ' active' : '');
-                sectionYear3.className = 'year-section' + (year === 'year3' ? ' active' : '');
-                
-                // Update hidden attribute for screen readers
-                sectionYear1.hidden = year !== 'year1';
-                // Force Year 1 to be visible on first load if it's the active year
-if (year === 'year1') {
-    sectionYear1.hidden = false;
-    sectionYear1.style.display = 'block';
-}                
-                sectionYear2.hidden = year !== 'year2';
-                sectionYear3.hidden = year !== 'year3';
-                
-                // Render timeline for the active year
-                renderTimeline();
-                
-                // Announce year change to screen readers
-                announceToScreenReaders(`Now showing ${timelineData[year].title} timeline`);
-            }
+   // Replace the entire setActiveYear function with this:
+
+function setActiveYear(year) {
+    console.log("Setting active year to:", year);
+    activeYear = year;
+    
+    // Update tabs
+    tabYear1.className = 'year-tab' + (year === 'year1' ? ' active' : '');
+    tabYear2.className = 'year-tab' + (year === 'year2' ? ' active' : '');
+    tabYear3.className = 'year-tab' + (year === 'year3' ? ' active' : '');
+    
+    tabYear1.setAttribute('aria-selected', year === 'year1');
+    tabYear2.setAttribute('aria-selected', year === 'year2');
+    tabYear3.setAttribute('aria-selected', year === 'year3');
+    
+    // Update sections - use direct style manipulation instead of hidden attribute
+    sectionYear1.style.display = (year === 'year1') ? 'block' : 'none';
+    sectionYear2.style.display = (year === 'year2') ? 'block' : 'none';
+    sectionYear3.style.display = (year === 'year3') ? 'block' : 'none';
+    
+    // Set classes for CSS styling
+    sectionYear1.className = 'year-section' + (year === 'year1' ? ' active' : '');
+    sectionYear2.className = 'year-section' + (year === 'year2' ? ' active' : '');
+    sectionYear3.className = 'year-section' + (year === 'year3' ? ' active' : '');
+    
+    // Force ARIA attributes
+    sectionYear1.setAttribute('aria-hidden', year !== 'year1');
+    sectionYear2.setAttribute('aria-hidden', year !== 'year2');
+    sectionYear3.setAttribute('aria-hidden', year !== 'year3');
+    
+    // Remove hidden attribute entirely
+    if (sectionYear1.hasAttribute('hidden')) sectionYear1.removeAttribute('hidden');
+    if (sectionYear2.hasAttribute('hidden')) sectionYear2.removeAttribute('hidden');
+    if (sectionYear3.hasAttribute('hidden')) sectionYear3.removeAttribute('hidden');
+    
+    // Ensure Year 1 is always correctly styled if it's active
+    if (year === 'year1') {
+        sectionYear1.style.display = 'block';
+        sectionYear1.classList.add('active');
+    }
+    
+    // Fresh render of timeline
+    console.log("About to render timeline");
+    // Clear existing elements
+    if (weekMarkers) weekMarkers.innerHTML = '';
+    if (timelineItems) timelineItems.innerHTML = '';
+    if (verticalColumns) timelineItems.innerHTML = '';
+    
+    // Render new timeline
+    renderTimeline();
+    
+    // Announce year change to screen readers
+    announceToScreenReaders(`Now showing ${timelineData[year].title} timeline`);
+    
+    console.log("Active year set complete");
+}
             
             // Calculate position for timeline items
             function calculatePosition(start, duration, totalWeeks) {
